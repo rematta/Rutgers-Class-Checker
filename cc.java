@@ -14,14 +14,6 @@ public class cc{
         Scanner scan = new Scanner(System.in);
         ArrayList<String> subjectnum = new ArrayList<String>();
         String snum = "";
-        String subject = "";
-        String course = "";
-        String section = "";
-        String jsontext = "";
-        JSONParser parser = new JSONParser();
-        JSONArray array = new JSONArray();
-        JSONObject json = new JSONObject();
-        Object obj = new Object();
 
         while (true)
         {
@@ -33,7 +25,30 @@ public class cc{
             }
             subjectnum.add(snum);
         }
+        while (true)
+        {
+            coursechecker(subjectnum);
+            System.out.println("end of cycle");
+            try{
+                Thread.sleep(60*1000);
+            }catch(Exception e){
+                System.out.println("Wait didn't work :(");
+                return;
+            }
+        }
+    }
 
+    public static void coursechecker(ArrayList<String> subjectnum)
+    {
+        String snum = "";
+        String subject = "";
+        String course = "";
+        String section = "";
+        String jsontext = "";
+        JSONParser parser = new JSONParser();
+        JSONArray array = new JSONArray();
+        JSONObject json = new JSONObject();
+        Object obj = new Object();
         for (int i = 0; i < subjectnum.size(); i++)
         {
             snum = subjectnum.get(i);
@@ -89,11 +104,12 @@ public class cc{
             }
             if ((boolean)json.get("openStatus"))
             {
-                System.out.println("\nThe class "+snum+" is open! Index: "+json.get("index")+"\n");
+                System.out.println("The class "+snum+" is open! Index: "+json.get("index"));
             } else {
-                System.out.println("\nThe class "+snum+" is closed :(\n");
+                System.out.println("The class "+snum+" is closed :(");
             }
         }
+
     }
 
 
