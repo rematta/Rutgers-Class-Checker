@@ -8,26 +8,63 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 import org.json.simple.parser.JSONParser;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.nio.charset.Charset;
+
 public class cc{
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         ArrayList<String> subjectnum = new ArrayList<String>();
         String snum = "";
+        File f = new File("classes");
+        FileInputStream fis;
+        InputStreamReader isr;
+        BufferedReader br;
+        String line = "";
+
+
+        if (f.exists() && !f.isDirectory())
+        {
+            try{
+                fis = new FileInputStream(f); 
+                isr = new InputStreamReader(fis,Charset.forName("UTF-8"));
+                br = new BufferedReader(isr);
+            }catch(Exception e){
+                System.out.println("File reading failed :(");
+                return;
+            }
+            try{
+                while ((line = br.readLine()) != null)
+                {
+                    subjectnum.add(line);
+                }
+            }catch(Exception e)
+            {
+                System.out.println("Reading from the file failed :(");
+                return;
+            }
+        }
+        else{
+            while (true)
+            {
+                System.out.print("Enter a subject, course number and section (e.g. 198:211:11, 000 to end): ");
+                snum = scan.next();
+                if (snum.equals("000"))
+                {
+                    break;
+                }
+                subjectnum.add(snum);
+            }
+            System.out.println("");
+        }
 
         while (true)
         {
-            System.out.print("Enter a subject, course number and section (e.g. 198:211:11, 000 to end): ");
-            snum = scan.next();
-            if (snum.equals("000"))
-            {
-                break;
-            }
-            subjectnum.add(snum);
-        }
-        while (true)
-        {
-            coursechecker(subjectnum);
+            classchecker(subjectnum);
             System.out.println("end of cycle");
             try{
                 Thread.sleep(60*1000);
@@ -38,7 +75,7 @@ public class cc{
         }
     }
 
-    public static void coursechecker(ArrayList<String> subjectnum)
+    public static void classchecker(ArrayList<String> subjectnum)
     {
         String snum = "";
         String subject = "";
