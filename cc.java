@@ -64,10 +64,19 @@ public class cc{
 
         while (true)
         {
-            classchecker(subjectnum);
-            System.out.println("end of cycle");
+            subjectnum=classchecker(subjectnum);
+            if (subjectnum == null)
+            {
+                return;
+            }
+            System.out.println("end of cycle\n");
+            if (subjectnum.size() == 0)
+            {
+                System.out.println("No more courses to lookup!  Terminating Program...");
+                return;
+            }
             try{
-                Thread.sleep(60*1000);
+                Thread.sleep(5*1000);
             }catch(Exception e){
                 System.out.println("Wait didn't work :(");
                 return;
@@ -75,7 +84,7 @@ public class cc{
         }
     }
 
-    public static void classchecker(ArrayList<String> subjectnum)
+    public static ArrayList<String> classchecker(ArrayList<String> subjectnum)
     {
         String snum = "";
         String subject = "";
@@ -86,6 +95,7 @@ public class cc{
         JSONArray array = new JSONArray();
         JSONObject json = new JSONObject();
         Object obj = new Object();
+        ArrayList<String> badcourse = new ArrayList<String>();
         for (int i = 0; i < subjectnum.size(); i++)
         {
             snum = subjectnum.get(i);
@@ -96,13 +106,13 @@ public class cc{
                 jsontext = readUrl("http://sis.rutgers.edu/soc/courses.json?subject="+subject+"&semester=12015&campus=NB&level=U");    
             }catch (Exception e){
                 System.out.println(e.getMessage());    
-                return;
+                return null;
             }
             try{
                 obj = parser.parse(jsontext);
             }catch (Exception e){
                 System.out.println(e.getMessage());
-                return;
+                return null;
             }
             array = (JSONArray)obj;
             try{
@@ -116,6 +126,7 @@ public class cc{
                 }
             }catch (Exception e){
                 System.out.println("Could not find info on the following class: "+snum);
+                badcourse.add(snum);
                 continue;
             }
 
@@ -137,6 +148,7 @@ public class cc{
                 }
             }catch (Exception e){
                 System.out.println("Could not find info(section number) on the following class: "+snum);
+                badcourse.add(snum);
                 continue;
             }
             if ((boolean)json.get("openStatus"))
@@ -146,6 +158,11 @@ public class cc{
                 System.out.println("The class "+snum+" is closed :(");
             }
         }
+        for (int i = 0; i < badcourse.size(); i++)
+        {
+            subjectnum.remove(badcourse.get(i));
+        }
+        return subjectnum;
 
     }
 
