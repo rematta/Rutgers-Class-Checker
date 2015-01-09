@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.io.BufferedReader;
 import java.nio.charset.Charset;
 
+import java.io.*;
+import javax.sound.sampled.*;
+
 public class cc{
 
     public static void main(String[] args) {
@@ -76,7 +79,7 @@ public class cc{
                 return;
             }
             try{
-                Thread.sleep(5*1000);
+                Thread.sleep(30*1000);
             }catch(Exception e){
                 System.out.println("Wait didn't work :(");
                 return;
@@ -153,6 +156,7 @@ public class cc{
             }
             if ((boolean)json.get("openStatus"))
             {
+                play("TP_Fairy.wav");
                 System.out.println("The class "+snum+" is open! Index: "+json.get("index"));
             } else {
                 System.out.println("The class "+snum+" is closed :(");
@@ -184,4 +188,27 @@ public class cc{
                 reader.close();
         }
     }
+
+    public static void play(String filename)
+    {
+        try {
+            File yourFile = new File(filename);
+            AudioInputStream stream;
+            AudioFormat format;
+            DataLine.Info info;
+            Clip clip;
+        
+            stream = AudioSystem.getAudioInputStream(yourFile);
+            format = stream.getFormat();
+            info = new DataLine.Info(Clip.class, format);
+            clip = (Clip) AudioSystem.getLine(info);
+            clip.open(stream);
+            clip.start();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
 }
