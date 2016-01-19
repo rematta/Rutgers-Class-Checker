@@ -102,11 +102,17 @@ public class cc{
         for (int i = 0; i < subjectnum.size(); i++)
         {
             snum = subjectnum.get(i);
+            if (snum.length() != 10)
+            {
+                System.out.println("Invalid entry: "+snum);
+                badcourse.add(snum);
+                continue;
+            }
             subject = snum.substring(0,3);
             course = snum.substring(4,7);
             section = snum.substring(8);
             try{
-                jsontext = readUrl("http://sis.rutgers.edu/soc/courses.json?subject="+subject+"&semester=12015&campus=NB&level=U");    
+                jsontext = readUrl("http://sis.rutgers.edu/soc/courses.json?subject="+subject+"&semester=12016&campus=NB&level=U");    
             }catch (Exception e){
                 System.out.println(e.getMessage());    
                 return null;
@@ -209,6 +215,4 @@ public class cc{
             System.out.println(e.getMessage());
         }
     }
-
-
 }
